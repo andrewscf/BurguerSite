@@ -1,0 +1,35 @@
+
+
+.aplicar-css{
+    display: grid;
+    grid-template-columns: 3fr 1fr 9fr;
+    
+   
+}
+
+.aplicar-css2{
+    width: 5rem;
+    height: 5rem
+}
+
+.aplicar-css3{
+    display: grid;
+    grid-template-rows: 4fr 0.5fr 2fr;
+
+}
+.aplicar-css4{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    
+   
+}
+.aplicar-css5{
+    display: grid;
+    grid-template-rows: 3fr 1fr 1fr;
+    
+   
+}
+
+.aplicar-css6{
+    background: radial-gradient(circle, rgba(74,74,74,1) 0%, rgba(46,46,46,1) 40%, rgba(33,33,33,1) 100%)
+}

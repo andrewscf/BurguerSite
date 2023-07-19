@@ -1,0 +1,40 @@
+{
+	"folders": [
+		{
+			"name": "html",
+			"path": "../../../../HTML/html"
+		},
+		{
+			"name": "Weather",
+			"path": "../../../../Weather"
+		},
+		{
+			"name": "EJS Challenge Starting Files",
+			"path": "../../../../EJS Challenge Starting Files"
+		},
+		{
+			"name": "Secrets - Starting Code",
+			"path": "../../../../Secrets - Starting Code"
+		},
+		{
+			"name": "Food",
+			"path": "../../../../Food"
+		},
+		{
+			"name": "Estudos",
+			"path": "../../../../Estudos"
+		},
+		{
+			"path": "../../../../Projeto-Bttv2"
+		},
+		{
+			"path": "../../../../06-onwards-to-a-bigger-project-starting-project"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Projeto-Btt"
+	}
+}
