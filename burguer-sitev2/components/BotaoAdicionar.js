@@ -1,14 +1,18 @@
 import { useState } from "react"
 import { ArrowLeft, Plus, Minus } from 'lucide-react';
 
-function BotaoAdicionar(){
+function BotaoAdicionar(props){
     const [numero, setNumero] = useState(1)
+
+    props.pegarNumero(numero)
+
     function aumentar(){
         setNumero(numero+1)
     }
 
     function diminuir(){
-        setNumero(numero-1)
+        if (numero > 1){
+            setNumero(numero-1)}
     }
 
     return(

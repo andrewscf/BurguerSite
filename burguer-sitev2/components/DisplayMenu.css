@@ -2,14 +2,14 @@
 
 .aplicar-css{
     display: grid;
-    grid-template-columns: 3fr 1fr 9fr;
+    grid-template-columns: 3fr 1fr 6fr;
     
    
 }
 
 .aplicar-css2{
-    width: 5rem;
-    height: 5rem
+    display: grid;
+
 }
 
 .aplicar-css3{
@@ -32,4 +32,23 @@
 
 .aplicar-css6{
     background: radial-gradient(circle, rgba(74,74,74,1) 0%, rgba(46,46,46,1) 40%, rgba(33,33,33,1) 100%)
+}
+
+.aplicar-css7{
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+}
+
+.aplicar-css8{
+    display: grid;
+    grid-template-columns: 8fr 2fr;
+}
+
+.aplicar-css9{
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+}
+
+.aplicar-font{
+    font-family: 'Black Ops One', cursive;
 }

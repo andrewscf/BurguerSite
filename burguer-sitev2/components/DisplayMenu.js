@@ -1,100 +1,120 @@
-import classico from '../assets/classico.png'
-import duplo from '../assets/duplo.png'
-import triplo from '../assets/triplo.png'
-import kids from '../assets/kids.png'
-import hotsimples from '../assets/hotsimples.png'
-import hotduplo from '../assets/hotduplo.png'
-import hotcalabresa from '../assets/hotcalabresa.png'
-import hotmisto from '../assets/hotmisto.png'
+'use client'
+
+
 import './DisplayMenu.css'
 import Image from 'next/image'
 import DisplayBebidas from './DisplayBebidas'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { storeBActions } from '../store/storeB-slice'
+import { useDispatch } from 'react-redux/es/exports'
+import { useSelector } from 'react-redux/es/hooks/useSelector'
+import AdicionarBurguer from './AdicionarBurguer'
+import AdicionarDog from './AdicionarDog'
+import AdicionarPorcao from './AdicionarPorcao'
+import Modal from './Modal'
+import { Cherry_Bomb_One } from 'next/font/google'
+import PaginaInicial from './PaginaInicial'
+import { TimerResetIcon } from 'lucide-react'
+
+
+const cherry = Cherry_Bomb_One({
+  subsets: ['latin'],
+  weight: ['400']
+})
+
 
 
 function DisplayMenu(props){
+    const dispatch = useDispatch()
+    const [menuId, setMenuId] = useState(0)
+
+    const [isValid, setIsValid] = useState(true)
+      function clickAdicionarHandler(e){
+          
+          setMenuId(Number(e.currentTarget.id))
+          console.log(menuId)
+          setIsValid(false)
+  
+      }
+      function clickVoltarHandler(){
+        setIsValid(true)
+        console.log(isValid)
+    }
+
     
+    useEffect(()=>{
+     const fetchDados = async () => {
+        const response = await fetch('/api/dados')
+        const data = await response.json()
 
-    const dadosBurguer = [
-        {
-            key: 'B1',
-            nome: 'Clássico',
-            descrição: 'Hamburguer de gado, alface, tomate, queijo mussarela, picles, cebola agridoce, bacon, molho e fritas',
-            img: classico,
-            valor: 21.50
-        },
-        {
-            key: 'B2',
-            nome: 'Duplo',
-            descrição: 'Hamburguer de gado, hamburguer de frango, alface, tomate, queijo mussarela, picles, cebola agridoce, bacon, molho e fritas',
-            img: duplo,
-            valor: 26.50
-        },
-        {
-            key: 'B3',
-            nome: 'Triplo',
-            descrição: '3 hamburgueres de gado, alface, tomate, 3 fatias de queijo mussarela, aneis de cebola, picles, cebola agridoce, bacon e fritas',
-            img: triplo,
-            valor: 34.50
-        },
-        {
-            key: 'B4',
-            nome: 'Kids',
-            descrição: 'Hamburguer de gado, alface, tomate, queijo mussarela, picles, cebola agridoce, bacon molho, fritas e um refrigerante 200ml',
-            img: kids,
-            valor: 18.50
-        }
-    ]
+        dispatch(storeBActions.loadStore(data))
+        
 
-    const dadosDog =[
-        {
-            key: 'H1',
-            nome: 'Hot Dog Simples',
-            descrição: 'Salsicha, alface, tomate, milho, ervilha, batata palha, mostarda, catchup e molho',
-            img: hotsimples,
-            valor: 16
-        },
-        {
-            key: 'H2',
-            nome: 'Hot Dog Duplo',
-            descrição: '2 salsichas, alface, tomate, milho, ervilha, batata palha, mostarda, catchup e molho',
-            img: hotduplo,
-            valor: 18.50
-        },
-        {
-            key: 'H3',
-            nome: 'Hot Dog Calabresa',
-            descrição: 'Calabresa, alface, tomate, milho, ervilha, batata palha, mostarda, catchup e molho',
-            img: hotcalabresa,
-            valor: 19
-        },
-        {
-            key: 'H4',
-            nome: 'Hot Dog Misto',
-            descrição: 'Salsicha, calabresa, alface, tomate, milho, ervilha, batata palha, mostarda, catchup e molho',
-            img: hotmisto,
-            valor: 20
-        }
+     }
+     fetchDados()
+    }, [])
 
-    ]
+   
 
-    if (props.valorMenu === 'dog'){
+    const dadosAPI2 = useSelector(state => state.storeB.items)
+    
+    const valorMenu = useSelector(state => state.storeControl.valorMenu)
+    const imagens = useSelector(state => state.storeB.imagens)
+    
+    
+    if (valorMenu === 'burguer' && !isValid){
+        return(
+          
+        <Modal>
+            <AdicionarBurguer onClickVoltar={clickVoltarHandler} menuId= {menuId} dadosAPI2={dadosAPI2} imagens={imagens}/>
+        </Modal>
+        )
+      }
+      if (valorMenu === 'porcao' && !isValid){
+        return(
+          
+        <Modal>
+            <AdicionarPorcao onClickVoltar={clickVoltarHandler} menuId= {menuId} dadosAPI2={dadosAPI2} imagens={imagens}/>
+        </Modal>
+        )
+      }
+    
+      if (valorMenu === 'dog' && !isValid){
+        return(
+          
+        <Modal>
+            <AdicionarDog onClickVoltar={clickVoltarHandler} menuId= {menuId} dadosAPI2={dadosAPI2} imagens={imagens}/>
+        </Modal>
+        )
+      }
+    
+    
+    
+    if (valorMenu === 'dog' && isValid){
+
+
+        let novoDogs = dadosAPI2[0].dogs.map((item) => 
+        Object.assign({}, item, {selected:false})
+        )
+
+
         return(<div className='m-2 flex flex-col gap-3'>
-        <h2 className='ml-3 text-2xl text-left font-serif'>Hot Dogs</h2>
+        <h2 className='ml-3 text-2xl text-left font-serif'><strong>Hot Dogs</strong></h2>
         <ul>
-        {dadosDog.map(item => <li key={item.key}><div className='aplicar-css m-2 h-40 grid grid-cols-3 border-solid border rounded-3xl drop-shadow-md bg' >
-            <div className='flex items-end bg-amareloP rounded-l-3xl'>
+        {novoDogs.map(item => <li key={item.id}><div className='aplicar-css m-2 h-40 grid grid-cols-3 border-solid border rounded-3xl drop-shadow-md bg-white' >
+            <div className='flex items-end  rounded-l-3xl'>
           
             
-                <Image className='absolute left-2 top-6' src={item.img} width={110} height= "auto" alt='Imagem'/>
-                <p className='ml-4 mb-4 font-bold'>{`R$${item.valor.toFixed(2)}`}</p>
+                <Image className='absolute -left-2 top-6' src={imagens.Dogs[Number(item.id)-1]} width={150} height= "auto" alt='Imagem'/>
+                <div className='ml-4 mb-4 font-bold text-red-600 text-xl '><p className={cherry.className}>{`R$${item.preço}`}</p></div>
           
             </div>
             <div></div>
-            <div className='flex flex-col justify-between text-end mb-3 mr-3'>
-                <h3 className='font-bold mt-3'>{item.nome}</h3>
-                <p className='text-xs'>{item.descrição}</p>
-                <div><button className='rounded-2xl bg-amareloP border border-solid w-24'>Adicionar</button></div>
+            <div className='flex flex-col  text-end mb-3 mr-3 justify-evenly' id={item.id} onClick={clickAdicionarHandler}>
+                <h3 className='font-bold mt-3 pb-3  drop-shadow'>{item.nome}</h3>
+                <p className='text-xs'>{item.descri}</p>
+                <div className='aplicar-css8 place-items-end text-green-500 text-sm'><TimerResetIcon/> <p> 10 min</p></div>
+                
           </div>
          
             
@@ -107,29 +127,41 @@ function DisplayMenu(props){
       </div>)
     }
 
-    if (props.valorMenu==='bebidas'){
+    if (valorMenu==='bebidas' && isValid){
+        let novoBebidas = dadosAPI2[0].bebidas.map((item) => 
+        Object.assign({}, item, {selected:false})
+        )
         return(
-            <DisplayBebidas/>
+            <DisplayBebidas dadosAPI = {novoBebidas}/>
         )
     }
     
+    
+    if (valorMenu==='burguer' && isValid){
 
+        let novoBurguer = dadosAPI2[0].burguer.map((item) => 
+        Object.assign({}, item, {selected:false})
+        )
+
+
+    
     return <div className='m-2 flex flex-col gap-3'>
-    <h2 className='ml-3 text-2xl text-left font-serif'>Burguers</h2>
+    <h2 className='ml-3 text-2xl text-left font-serif'><strong>Burguers</strong></h2>
     <ul>
-        {dadosBurguer.map(item => <li key={item.key}><div className='aplicar-css m-2 h-40 grid grid-cols-3 border-solid border rounded-3xl drop-shadow-md' >
-            <div className='flex items-end bg-amareloP rounded-l-3xl'>
+    {novoBurguer.map(item => <li key={item.id}><div className='aplicar-css m-2 h-40 grid grid-cols-3 border-solid border rounded-3xl drop-shadow-md bg-white' >
+            <div className='flex items-end  rounded-l-3xl'>
           
             
-                <Image className='absolute left-2 top-6' width={110} height= "auto" src={item.img} alt='Imagem'/>
-                <p className='ml-4 mb-4 font-bold'>{`R$${item.valor.toFixed(2)}`}</p>
+                <Image className='absolute -left-2 top-6' src={imagens.Burguer[Number(item.id)-1]} width={200} height= "auto" alt='Imagem'/>
+                <div className='ml-4 mb-4 font-bold text-red-600 text-xl drop-shadow'><p className={cherry.className}>{`R$${item.preço}`}</p></div>
           
             </div>
             <div></div>
-            <div className='flex flex-col justify-between text-end mb-3 mr-3'>
-                <h3 className='font-bold mt-3'>{item.nome}</h3>
-                <p className='text-xs'>{item.descrição}</p>
-                <div><button className='rounded-2xl bg-amareloP border border-solid w-24' onClick={props.onClickAdicionar}>Adicionar</button></div>
+            <div className='flex flex-col  text-end mb-3 mr-3 justify-evenly' id={item.id} onClick={clickAdicionarHandler}>
+                <h3 className='font-bold mt-3 pb-3  drop-shadow'>{item.nome}</h3>
+                <p className='text-xs'>{item.descri}</p>
+                <div className='aplicar-css8 place-items-end text-green-500 text-sm'><TimerResetIcon/> <p> 20 min</p></div>
+                
           </div>
          
             
@@ -139,7 +171,47 @@ function DisplayMenu(props){
         </ul>
     
     
-  </div>
+  </div>}
+  if (valorMenu==='porcao' && isValid){
+
+    let novoBurguer = dadosAPI2[0].porcao.map((item) => 
+    Object.assign({}, item, {selected:false})
+    )
+
+
+
+    return <div className='m-2 flex flex-col gap-3'>
+    <h2 className='ml-3 text-2xl text-left font-serif'>Porções</h2>
+    <ul>
+    {novoBurguer.map(item => <li key={item.id}><div className='aplicar-css m-2 h-40 grid grid-cols-3 border-solid border rounded-3xl drop-shadow-md bg-white' >
+            <div className='flex items-end  rounded-l-3xl'>
+          
+            
+                <Image className='absolute -left-2 top-3' src={imagens.Porcao[Number(item.id)-1]} width={150} height= "auto" alt='Imagem'/>
+                <div className='ml-4 mb-4 font-bold text-red-600 text-xl drop-shadow'><p className={cherry.className}>{`R$${item.preço}`}</p></div>
+          
+            </div>
+            <div></div>
+            <div className='flex flex-col  text-end mb-3 mr-3 justify-evenly' id={item.id} onClick={clickAdicionarHandler}>
+                <h3 className='font-bold mt-3 pb-3  drop-shadow'>{item.nome}</h3>
+                <p className='text-xs'>{item.descri}</p>
+                <div className='aplicar-css8 place-items-end text-green-500 text-sm'><TimerResetIcon/> <p> 20 min</p></div>
+                
+          </div>
+         
+            
+            
+          
+        </div > </li>)}
+    </ul>
+
+
+    </div>} else{
+
+  return <PaginaInicial/>}
+
 }
+
+
 
 export default DisplayMenu
