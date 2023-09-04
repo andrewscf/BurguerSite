@@ -42,25 +42,11 @@ function DisplayMenu(props){
     }
 
     
-    useEffect(()=>{
-     const fetchDados = async () => {
-        const response = await fetch('/api/dados')
-        const data = await response.json()
 
-        dispatch(storeBActions.loadStore(data))
-        
-
-     }
-     fetchDados()
-    }, [])
-
-   
-
-    const dadosAPI2 = useSelector(state => state.storeB.items)
     
     const valorMenu = useSelector(state => state.storeControl.valorMenu)
+    const dadosAPI2 = useSelector(state => state.storeB.items)
     const imagens = useSelector(state => state.storeB.imagens)
-    
     
     if (valorMenu === 'burguer' && !isValid){
         return(

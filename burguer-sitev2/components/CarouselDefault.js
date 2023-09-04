@@ -1,16 +1,14 @@
 import { Carousel } from "@material-tailwind/react";
-import teste1 from '../assets/page.png'
-import teste2 from '../assets/page2.png'
-import Image from "next/image";
+
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { useEffect } from "react";
 
-export function CarouselDefault() {
-    const dadosAPI2 = useSelector(state => state.storeB.items)
 
-    if(dadosAPI2[0] === undefined){
+export function CarouselDefault(props) {
+
+    if(!props.carregado){
         return <div></div>
     } else{
+    const dadosAPI2 = useSelector(state => state.storeB.items)
     let imagens= dadosAPI2[0].imagens.map((item) => 
         Object.assign({}, item, {selected:false})
         )

@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux/es/exports'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import { storeControlActions } from '../store/storeControl-slice'
 import { ChevronLeft } from 'lucide-react'
-import { Lilita_One } from '@next/font/google'
+import { Lilita_One } from 'next/font/google'
 import { CarouselDefault } from './CarouselDefault'
 
 const black = Lilita_One({
@@ -23,7 +23,10 @@ const black = Lilita_One({
 
 function Menu(props){
     const dispatch = useDispatch()
-    const valorMenu = useSelector(state => state.storeControl.valorMenu)
+    let valorMenu = ''
+    if (props.carregado){
+     valorMenu = useSelector(state => state.storeControl.valorMenu)}
+    
 
     function onClickBurguerHandler(){
       dispatch(storeControlActions.alterValorMenu('burguer'))
@@ -41,11 +44,8 @@ function Menu(props){
       dispatch(storeControlActions.alterValorMenu(''))
     }
     
-
-
-
     return <div className=' bg-amber-50'>
-      {(valorMenu === '') && <CarouselDefault/>}
+      {(valorMenu === '') && <CarouselDefault carregado={props.carregado}/>}
       
     {(valorMenu === '') ? <h2 className='mt-2 ml-5 text-2xl text-left font-serif'><strong>Menu</strong></h2>: <header className='z-10 bg-white sticky top-0 h-10'>
             <div className='absolute text-amareloP' onClick={onClickVoltarHandler} ><ChevronLeft height={40}/></div>
